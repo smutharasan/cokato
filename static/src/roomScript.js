@@ -1,6 +1,11 @@
 const videoGrid = document.getElementById('video-grid');
 const socket = io('/');
-const myPeer = new Peer(undefined, { host: '/', port: 8081 });
+const myPeer = new Peer(undefined, {
+  host: 'peerjs-server.herokuapp.com',
+  secure: true,
+  port: 443,
+});
+//const myPeer = new Peer(undefined, { host: 'cokato.herokuapp.com', port: 443 });
 const myVideo = document.createElement('video');
 myVideo.muted = true;
 
@@ -17,12 +22,16 @@ navigator.mediaDevices
       console.log('CAlling the other person');
       call.answer(stream);
       const video = document.createElement('video');
-      call.om('stream', (userVideoStream) => {
+      call.on('stream', (userVideoStream) => {
         addVideoStream(video, userVideoStream);
       });
     });
     socket.on('user-connected', (givenUserID) => {
-      connectToNewUser(givenUserID, stream);
+      setTimeout(() => {
+        // user joined
+        connectToNewUser(givenUserID, stream);
+      }, 3000);
+      //connectToNewUser(givenUserID, stream);
     });
   })
   .catch((err) => console.error(err));
@@ -32,7 +41,7 @@ socket.on('user-disconnected', (userID) => {
   console.log(userID);
 });
 
-myPeer.on('opem', (id) => {
+myPeer.on('open', (id) => {
   socket.emit('join-room', ROOM_ID, id);
 });
 
