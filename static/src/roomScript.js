@@ -12,6 +12,7 @@ navigator.mediaDevices
   .then((stream) => {
     console.log('hello');
     addVideoStream(myVideo, stream);
+    console.log('TEST');
     myPeer.on('call', (call) => {
       console.log('CAlling the other person');
       call.answer(stream);
