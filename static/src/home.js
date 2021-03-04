@@ -22,7 +22,7 @@ document
   .addEventListener('submit', signInFormValidate);
 
 function signInFormValidate(givenEvent) {
-  const passwordExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{10,}$/;
+  const passwordExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
   var validationFlag = true;
 
