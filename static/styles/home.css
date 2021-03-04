@@ -95,9 +95,9 @@ section {
     justify-content: space-between;
 }
 
-.cokatoLogo img {
+/* .cokatoLogo img {
     max-width: 100%;
-}
+} */
 
 .hamburgerMenu {
     font-size: 2.6rem;
@@ -718,13 +718,13 @@ section {
 
 /* Gui's stuff */
 
-#logo {
+.cokatoLogo {
     border-radius: 50%;
     height: 100px;
 }
 
 @media screen and (max-width: 768px) {
-    #logo {
+    .cokatoLogo {
         height: 60px;
     }
 }
