@@ -8,7 +8,7 @@ const myPeer = new Peer(undefined, {
 //const myPeer = new Peer(undefined, { host: 'cokato.herokuapp.com', port: 443 });
 const myVideo = document.createElement('video');
 myVideo.muted = true;
-
+const peers = {};
 navigator.mediaDevices
   .getUserMedia({
     video: true,
@@ -40,6 +40,7 @@ navigator.mediaDevices
 
 socket.on('user-disconnected', (userID) => {
   console.log('AHHHHHHHHHHHHHHH');
+  if (peers[userID]) peers[userID].close();
   console.log(userID);
 });
 
@@ -51,15 +52,6 @@ myPeer.on('open', (id) => {
 //   console.log('hello + ' + givenUserID);
 // });
 
-function addVideoStream(video, stream) {
-  video.srcObject = stream;
-  video.addEventListener('loadedmetadata', () => {
-    console.log('playing');
-    video.play();
-  });
-  videoGrid.append(video);
-}
-
 function connectToNewUser(givenID, givenStream) {
   const call = myPeer.call(givenID, givenStream);
   const video = document.createElement('video');
@@ -69,4 +61,14 @@ function connectToNewUser(givenID, givenStream) {
   call.on('close', () => {
     video.remove();
   });
+  peers[givenID] = call;
+}
+
+function addVideoStream(video, stream) {
+  video.srcObject = stream;
+  video.addEventListener('loadedmetadata', () => {
+    console.log('playing');
+    video.play();
+  });
+  videoGrid.append(video);
 }
