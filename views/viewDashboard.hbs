@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>View Data</title>
+</head>
+
+<body>
+
+  <section id="dashboard">
+
+    <div class="container" >
+
+      <h5  style="color: black;" class="mainHeading">
+        <span class="mainTitle">Welcome {{registeredUser.firstName}}!</span>
+      </h5>
+     
+      <div style="display: flex; flex-direction: column; align-items: center;
+  justify-content: center;" >
+       <a href="/requestRoom" class="btn gradientButton" style="margin: 2.5rem;"> Create a Room
+                <span class="btnEllipsisHorizontal"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+        </a>
+        <a href="/userInformation" class="btn gradientButton" style="margin: 2.5rem;"> Profile Information
+                <span class="btnEllipsisHorizontal"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+        </a>
+        <a href="/settings" class="btn gradientButton" style="margin: 2.5rem;"> Settings
+                <span class="btnEllipsisHorizontal"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+</body>
+
+</html>

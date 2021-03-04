@@ -1,0 +1,73 @@
+<div class="modal fade" id="modalRegisterForm" tabindex="-1" role="dialog" aria-labelledby="signUpModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form id="signUpForm" action="/register-user" class="signUpForm" method="POST">
+
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-5">
+                        <i class="fa fa-user prefix grey-text"></i>
+                        <label for="signUpFormFirstName">First Name</label>
+                        <input type="text" name="signUpFormFirstName" id="signUpFormFirstName" class="form-control">
+                        <div class="valid-feedback">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <div class="invalid-feedback">Invalid Name</div>
+                    </div>
+                    <div class="md-form mb-5">
+                        <i class="fa fa-user prefix grey-text"></i>
+                        <label for="signUpFormLastName">Last Name</label>
+                        <input type="text" name="signUpFormLastName" id="signUpFormLastName" class="form-control">
+                        <div class="valid-feedback">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <div class="invalid-feedback">Invalid Last Name</div>
+                    </div>
+                    <div class="md-form mb-5">
+                        <i class="fa fa-user prefix grey-text"></i>
+                        <label for="signUpFormUsername">Username</label>
+                        <input type="text" name="signUpFormUsername" id="signUpFormUsername" class="form-control">
+                        <div class="valid-feedback">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <div class="invalid-feedback">Invalid Username</div>
+                    </div>
+                    <div class="md-form mb-5">
+                        <i class="fa fa-envelope prefix grey-text"></i>
+                        <label for="signUpFormEmail">Email Address</label>
+                        <input type="email" name="signUpFormEmail" id="signUpFormEmail" class="form-control">
+                        <div class="valid-feedback">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <div class="invalid-feedback">Invalid Email Address</div>
+                    </div>
+
+                    <div class="md-form mb-4">
+                        <i class="fa fa-lock prefix grey-text"></i>
+                        <label for="signUpFormPass">Password</label>
+                        <input type="password" name="signUpFormPassword" id="signUpFormPassword" class="form-control">
+                        <div class="valid-feedback">
+                            <i class="fa fa-thumbs-up"></i>
+                        </div>
+                        <div class="invalid-feedback">Invalid Password</div>
+                    </div>
+
+                    {{#if errorsPresent.errorStatus}}
+                    <p>{{errorsPresent.errorMsg}}</p>
+                    {{else}}
+                    {{/if}}
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button id="signUpButton" type="submit" class="btn blackButton">Sign up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

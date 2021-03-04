@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>View Data</title>
+</head>
+
+<body>
+
+    <section id="dashboard" class="dashboardColor">
+
+        <div class="container">
+
+            <h5 class="mainHeading">
+                <span class="mainTitle" id="roomListingsMainTitle">Welcome</span>
+                <span class="mainTitle" id="roomListingsMainTitle">Your Information: </span>
+                <span class="mainSubTitle" id="roomListingsSubTitle">Username: {{registeredUser.username}}</span>
+                <span class="mainSubTitle" id="roomListingsSubTitle">First Name: {{registeredUser.firstName}}</span>
+                <span class="mainSubTitle" id="roomListingsSubTitle">Last Name: {{registeredUser.lastName}}</span>
+                <span class="mainSubTitle" id="roomListingsSubTitle">Admin Status: {{registeredUser.isAdmin}}</span>
+            </h5>
+
+
+            <div class="dashBoardWrapper">
+                <p>"But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was
+                    born and I will give you a complete account of the system, and expound the actual teachings of the
+                    great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or
+                    avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue
+                    pleasure rationally encounter con</p>
+
+                {{!-- <button class="btn formButton blackButton">Add Room
+                    <span class="btnEllipsisHorizontal"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+                </button>
+                <button class="btn formButton blackButton">Edit Room
+                    <span class="btnEllipsisHorizontal"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+                </button> --}}
+                <a href="roomListings">
+                    <button class="btn formButton blackButton">
+                        View Rooms
+                        <span class="btnEllipsisHorizontal"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></span>
+                    </button>
+                </a>
+            </div>
+
+
+
+
+        </div>
+    </section>
+
+
+</body>
+
+</html>

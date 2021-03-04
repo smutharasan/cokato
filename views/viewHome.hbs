@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>View Data</title>
+</head>
+
+<body>
+
+
+
+  <section class="searchForm">
+    <div class="container">
+      <form action="POST" action="" class="form" id="homeInputMainForm">
+
+        <div class="inputFormContainer" id="homeInputForm">
+          <label for="destination" class="inputLabel">Destination</label>
+          {{!-- <input type="text" class="input" id="destination"> --}}
+          <select name="destination" id="destinationSelection" class="options" onchange="showRoomListings(this.value)">
+            <option value="">Select a Destination:</option>
+            <option value="1990 Christ Street, Chennai, India">India</option>
+            <option value="1999 DeckTheBells, North Pole">North Pole</option>
+            <option value="1870  Pearl Street, Sacramento">United States</option>
+          </select>
+        </div>
+       
+      </form>
+    </div>
+
+
+  </section>
+
+  {{!-- <section class="roomListingsByLocation">
+    
+  </section> --}}
+
+
+</body>
+
+</html>
