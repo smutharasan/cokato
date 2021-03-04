@@ -3,12 +3,31 @@
 
 <head>
     <title>View Data</title>
+    <script>//http://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=a53b6bfe3090434d97c0069edda96c77</script>
 </head>
 
 <body>
 
-    <section id="dashboard" class="dashboardColor">
-        <div class="container">
+    <section id="newsDashboard">
+        <div class="container newsBody">
+            {{#each givenNewsOfTheDay}}
+                <div class="blog-post">
+                    <div class="blog-post__img">
+                        <img src="{{this.urlToImage}}" alt="{{this.title}}">
+                    </div>
+                    <div class="blog-post__info">
+                        <div class="blog-post__date">
+                            <span>Published at {{this.publishedAt}}</span>
+                        </div>
+                        <h1 class="blog-post__title">{{this.title}}</h1>
+                        <p class="blog-post__text">
+                            {{this.description}}
+                        </p>
+                        <a href="{{this.url}}" class="blog-post__cta">Read More</a>
+
+                    </div>
+                </div>
+            {{/each}}
         </div>
     </section>
 

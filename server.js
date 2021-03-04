@@ -15,6 +15,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const path = require('path');
+const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const _ = require('underscore');
 const fs = require('fs');
 const moment = require('moment');
@@ -177,9 +178,23 @@ app.get('/shop', (req, res) => {
   });
 });
 app.get('/news', (req, res) => {
+  const xhttp = new XMLHttpRequest();
+  //http://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=a53b6bfe3090434d97c0069edda96c77
+
+  xhttp.open(
+    'GET',
+    'http://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=a53b6bfe3090434d97c0069edda96c77',
+    false
+  );
+  xhttp.send();
+
+  const news = JSON.parse(xhttp.responseText);
+  console.log(news.articles.slice(0, 10));
+
   res.render('viewNews', {
     registeredUser: req.session.user,
     errorsPresent: req.session.err,
+    givenNewsOfTheDay: news.articles.slice(0, 10),
     layout: 'homeBasic', // do not use the default Layout (main.hbs)
   });
 });

@@ -8,10 +8,10 @@ let homeHeader = document.querySelector('.header');
 let homehamburgerMenu = document.querySelector('.hamburgerMenu');
 
 // PC View only
-// window.addEventListener("scroll", function () {
-//   let wPOS = window.scrollY > 70;
-//   homeHeader.classList.toggle("active", wPOS);
-// });
+window.addEventListener('scroll', function () {
+  let wPOS = window.scrollY > 5;
+  homeHeader.classList.toggle('active', wPOS);
+});
 // Mobile View only
 homehamburgerMenu.addEventListener('click', function () {
   homeHeader.classList.toggle('menuToggled');
