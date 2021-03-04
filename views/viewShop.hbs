@@ -3,13 +3,85 @@
 
 <head>
     <title>View Data</title>
+    <style>
+        .product__img{
+            max-width: 35rem;
+            min-width: 35rem;
+            min-height: 35rem;
+            max-height: 35rem;
+        }
+        .productCard{
+            margin: 3rem;
+        }
+
+        @media screen and (min-width: 868px) {
+            .products-wrapper{
+                display:flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                background-color: #eee;
+                padding: 0 1.5rem;
+
+            }
+            .productCard{
+                max-width: 75rem;
+            }
+        }
+
+    </style>
 </head>
 
 <body>
 
-    <section id="dashboard" class="dashboardColor">
-        <div class="container">
-        </div>
+    <section id="shopDashboard" class="shop-section">
+ 
+        <div class="products-wrapper">
+            {{#each retrievedProducts}}
+
+             <div class="card productCard">
+                <img class="card-img-top product__img" src="{{this.thumbnail}}" alt="{{this.title}}">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Average Rating: {{this.reviews.rating}}/5</li>
+                        <li class="list-group-item"> {{this.reviews.total_reviews}} people has reviewed this product!</li>
+                    </ul>
+                    <a href="{{this.url}}" class="btn btn-primary">Contact Owner</a>
+                </div>
+            </div>
+            {{/each}}
+        </div> 
+        
+
+
+            {{!-- <div class="card">
+                <div class="content-1">
+                    <span class="like">
+                        <i class="fas fa-heart"></i>
+                    </span>
+                    <div class="main-image">
+                        <img src="{{this.thumbnail}}" alt="" srcset="">
+                    </div>
+                </div>
+                <div class="content-2">
+                    <div class="branding">
+                        <span>{{this.title}}</span>
+                    </div>
+                    <div class="ratings">
+                        Average rating: {{this.reviews.rating}} / 5
+                    </div>
+                    <div class="shop-paragraph">
+                        {{this.reviews.total_reviews}} people has reviewed this product!
+                    </div>
+                    <div class="price">
+                        <span>$</span>
+                        <span>{{this.price.current_price}}</span>
+                        <a>Contact Owner</a>
+                    </div>
+                </div>
+            </div> --}}
     </section>
 
 

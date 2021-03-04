@@ -14,6 +14,9 @@ const server = require('http').Server(app);
 // const server = app.listen(HTTP_PORT);
 const io = require('socket.io')(server);
 
+const amazonScraper = require('amazon-buddy');
+const kijiji = require('kijiji-scraper');
+
 const path = require('path');
 const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 const _ = require('underscore');
@@ -170,12 +173,24 @@ app.get('/about', (req, res) => {
     layout: 'home', // do not use the default Layout (main.hbs)
   });
 });
+
 app.get('/shop', (req, res) => {
-  res.render('viewShop', {
-    registeredUser: req.session.user,
-    errorsPresent: req.session.err,
-    layout: 'homeBasic', // do not use the default Layout (main.hbs)
-  });
+  amazonScraper
+    .products({
+      keyword: 'medical supplies & equipment',
+      number: 1,
+      country: 'CA',
+    })
+    .then((prods) => {
+      results = prods.result.slice(0, 10);
+      res.render('viewShop', {
+        registeredUser: req.session.user,
+        errorsPresent: req.session.err,
+        retrievedProducts: results,
+        layout: 'homeBasic', // do not use the default Layout (main.hbs)
+      });
+    })
+    .catch(console.error);
 });
 app.get('/news', (req, res) => {
   const xhttp = new XMLHttpRequest();
@@ -189,7 +204,6 @@ app.get('/news', (req, res) => {
   xhttp.send();
 
   const news = JSON.parse(xhttp.responseText);
-  console.log(news.articles.slice(0, 10));
 
   res.render('viewNews', {
     registeredUser: req.session.user,
@@ -200,10 +214,7 @@ app.get('/news', (req, res) => {
 });
 
 app.get('/dashboard', ensureLogin, (req, res) => {
-  console.log(req.session.user._id);
   if (!req.session.user.isAdmin) {
-    console.log('rendering dashboard');
-
     UserModel.findOne({
       user_name_user: req.session.user.username,
     })
@@ -230,66 +241,6 @@ app.get('/adminDashboard', ensureLogin, ensureAdminLogin, (req, res) => {
   });
 });
 
-app.get('/roomListings/:destination', (req, res, next) => {
-  const givenDestination = req.params.destination;
-  console.log(givenDestination);
-
-  if (givenDestination != 'Edit') {
-    RoomModel.find({
-      room_location: givenDestination,
-    })
-      .lean()
-      .exec()
-      .then((roomListings) => {
-        res.json({
-          hasRoomListings: true,
-          roomListings,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  } else {
-    next('route');
-  }
-});
-
-app.get(
-  '/roomListings/Edit',
-  ensureLogin,
-  ensureAdminLogin,
-  (req, res, next) => {
-    console.log('getting rendered');
-    res.render('viewEditRoomListing', {
-      registeredUser: req.session.user,
-      errorsPresent: req.session.err,
-      layout: 'home', // do not use the default Layout (main.hbs)
-    });
-  }
-);
-
-app.get('/roomListings', (req, res) => {
-  RoomModel.find()
-    .lean()
-    .exec()
-    .then((roomList) => {
-      _.each(roomList, (givenRoom) => {
-        givenRoom.room_photo.uploadDate = new Date(
-          givenRoom.room_photo.photo_created_at
-        ).toDateString();
-      });
-
-      // send the html view with our form to the client
-      res.render('viewRoomListing', {
-        registeredUser: req.session.user,
-        errorsPresent: req.session.err,
-        roomListings: roomList,
-        hasRoomListings: !!roomList.length,
-        layout: 'home', // do not use the default Layout (main.hbs)
-      });
-    });
-});
-
 app.get('/requestRoom', ensureLogin, (req, res) => {
   res.redirect(`/room/${uuidV4()}`);
 });
@@ -314,84 +265,6 @@ io.on('connection', (socket) => {
     });
   });
 });
-
-app.get('/roomListings/Details/:roomTitle', ensureLogin, (req, res) => {
-  const roomTitle = req.params.roomTitle;
-
-  RoomModel.findOne({
-    room_title: roomTitle,
-  })
-    .lean()
-    .exec()
-    .then((roomListing) => {
-      res.render('viewRoomListingDetails', {
-        user: req.session.user,
-        givenRoomListing: roomListing,
-        errorsPresent: req.session.err,
-        editStatus: true,
-        layout: 'home',
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-});
-
-app.get(
-  '/roomListings/Delete/:roomTitle',
-  ensureLogin,
-  ensureAdminLogin,
-  (req, res) => {
-    const roomTitle = req.params.roomTitle;
-    console.log(roomTitle);
-
-    RoomModel.findOne({
-      room_title: roomTitle,
-    })
-      .lean()
-      .exec()
-      .then((roomListing) => {
-        console.log(roomListing._id);
-        console.log(roomListing.room_title);
-        RoomModel.deleteOne({
-          _id: roomListing._id,
-        })
-          .then(() => {
-            console.log('success');
-            res.redirect('/roomListings');
-          })
-          .catch((err) => console.error(err));
-      })
-      .catch((err) => console.error(err));
-  }
-);
-
-app.get(
-  '/roomListings/edit/:roomTitle',
-  ensureLogin,
-  ensureAdminLogin,
-  (req, res) => {
-    const roomTitle = req.params.roomTitle;
-
-    RoomModel.findOne({
-      room_title: roomTitle,
-    })
-      .lean()
-      .exec()
-      .then((roomListing) => {
-        res.render('viewEditRoomListing', {
-          user: req.session.user,
-          givenRoomListing: roomListing,
-          errorsPresent: req.session.err,
-          editStatus: true,
-          layout: 'home',
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-);
 
 app.get('/logout', (req, res) => {
   //registeredUser.validState = false;
@@ -574,137 +447,6 @@ app.post('/user/:user_id/follow-user', (req, res) => {
   });
 });
 
-// app.post(
-//   "/roomListings/Edit/edit-room",
-//   ensureLogin,
-//   ensureAdminLogin,
-//   upload.single("photo"),
-//   (req, res) => {
-//     console.log(req.body.editRLFormRoomDesc);
-
-//     const givenRoom = new RoomModel({
-//       room_title: req.body.editRLFormRoomTitle,
-//       room_price: parseFloat(req.body.editRLFormRoomPrice),
-//       room_description: req.body.editRLFormRoomDesc,
-//       room_location: req.body.editRLFormRoomLoc,
-//       room_photo: new PhotoModel({
-//         photo_filename: req.file.filename,
-//         photo_name: req.body.editRLFormRoomTitle,
-//         photo_owner_email: req.session.user.email,
-//       }),
-//     });
-
-//     if (req.body.editStatus === "1") {
-//       RoomModel.updateOne(
-//         {
-//           room_title: givenRoom.room_title,
-//           room_location: givenRoom.room_location,
-//         },
-//         {
-//           $set: {
-//             room_title: givenRoom.room_title,
-//             room_price: givenRoom.room_price,
-//             room_description: givenRoom.room_description,
-//             room_location: givenRoom.room_location,
-//             room_photo: givenRoom.room_photo,
-//           },
-//         }
-//       )
-//         .exec()
-//         .catch((err) => {
-//           console.error(err);
-//           res.redirect("/");
-//         });
-
-//       console.log("saved!");
-//       return res.redirect("/roomListings");
-//       //givenRoom.updateOne((err)=>{});
-//     } else {
-//       givenRoom.room_photo
-//         .save()
-//         .then((result) => {
-//           givenRoom
-//             .save()
-//             .then((response) => {
-//               req.session.room = {
-//                 validState: true,
-//                 title: givenRoom.room_title,
-//                 price: givenRoom.room_price,
-//                 location: givenRoom.room_location,
-//               };
-//               //console.log(locals.message);
-//               res.redirect("/roomListings");
-//             })
-//             .catch((err) => {
-//               console.log("There was an error registering the room");
-//               console.error(err);
-//               req.session.err = {
-//                 errorMsg: "Room already exists!",
-//                 errorStatus: true,
-//               };
-//               res.redirect("/roomListings/Edit");
-//             });
-//         })
-//         .catch((err) => console.error(err));
-//       //adding
-//     }
-//   }
-// );
-
-// app.post(
-//   "/roomListings/Details/book-room",
-//   ensureLogin,
-//   urlenParser,
-//   (req, res) => {
-//     const bookedRoom = new BookedRoomModel({
-//       room_title: req.body.detailsFormRoomTitle,
-//       room_price: parseFloat(req.body.detailsFormRoomPrice),
-//       room_location: req.body.detailsFormRoomLocation,
-//       children: req.body.detailsFormNumChildren,
-//       adults: req.body.detailsFormNumAdults,
-//       infants: req.body.detailsFormNumInfants,
-//       booked_start_date: new Date(
-//         moment(req.body.detailsFormCheckInDate, "YYYY-MM-DD")
-//       ),
-//       booked_end_date: new Date(
-//         moment(req.body.detailsFormCheckOutDate, "YYYY-MM-DD")
-//       ),
-//     });
-
-//     bookedRoom
-//       .save()
-//       .then((resultBookedRoom) => {
-//         UserModel.updateOne(
-//           {
-//             user_name_user: req.session.user.username,
-//           },
-//           {
-//             $push: {
-//               booked_rooms_array: resultBookedRoom,
-//             },
-//           }
-//         )
-//           .exec()
-//           .then((resultUser) => {
-//             console.log("saved successfully!");
-//           })
-//           .catch((err) => {
-//             console.error(err);
-//           });
-
-//         res.redirect("/dashboard");
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         res.redirect("/");
-//       });
-
-//     // res.redirect("/");
-//   }
-// );
-
-//#endregion
-
 //#region Admin Setup // Only run this once and only once
 app.get('/firstrunsetup', (req, res) => {
   //User that exists -> priyaArasan03121999
@@ -735,7 +477,6 @@ app.get('/firstrunsetup', (req, res) => {
             lastName: Supriya.user_name_last,
             isAdmin: Supriya.isAdmin,
           };
-          //console.log(locals.message);
           res.redirect('/dashboard');
         })
         .catch((err) => {
