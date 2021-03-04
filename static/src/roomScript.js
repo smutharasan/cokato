@@ -25,13 +25,15 @@ navigator.mediaDevices
       call.on('stream', (userVideoStream) => {
         addVideoStream(video, userVideoStream);
       });
+      call.on('close', () => {
+        video.remove();
+      });
     });
     socket.on('user-connected', (givenUserID) => {
       setTimeout(() => {
         // user joined
         connectToNewUser(givenUserID, stream);
       }, 3000);
-      //connectToNewUser(givenUserID, stream);
     });
   })
   .catch((err) => console.error(err));
