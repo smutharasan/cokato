@@ -158,7 +158,7 @@ section {
 /* Style the main content of the homepage*/
 .mainContent {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background: url('../assets/images/cokatoBG.jpg') center no-repeat;
     background-size: cover;
     display: flex;
@@ -727,4 +727,14 @@ section {
     .cokatoLogo {
         height: 60px;
     }
+}
+
+.profile-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.profile-container img {
+    max-width: 200px;
 }
