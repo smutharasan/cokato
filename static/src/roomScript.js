@@ -15,12 +15,21 @@ navigator.mediaDevices
     myPeer.on('call', (call) => {
       console.log('CAlling the other person');
       call.answer(stream);
+      const video = document.createElement('video');
+      call.om('stream', (userVideoStream) => {
+        addVideoStream(video, userVideoStream);
+      });
     });
     socket.on('user-connected', (givenUserID) => {
       connectToNewUser(givenUserID, stream);
     });
   })
   .catch((err) => console.error(err));
+
+socket.on('user-disconnected', (userID) => {
+  console.log('AHHHHHHHHHHHHHHH');
+  console.log(userID);
+});
 
 myPeer.on('opem', (id) => {
   socket.emit('join-room', ROOM_ID, id);
