@@ -187,7 +187,7 @@ app.get('/shop', (req, res) => {
     })
     .then((givenProducts) => {
       let validShopStatus = true;
-      if (results) {
+      if (givenProducts) {
         res.render('viewShop', {
           registeredUser: req.session.user,
           errorsPresent: req.session.err,
