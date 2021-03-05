@@ -38,20 +38,25 @@
     <section id="shopDashboard" class="shop-section">
  
         <div class="products-wrapper">
-            {{#each retrievedProducts}}
+            {{#if validShopStatus}}
+                {{#each retrievedProducts}}
 
-             <div class="card productCard">
-                <img class="card-img-top product__img" src="{{this.thumbnail}}" alt="{{this.title}}">
-                <div class="card-body">
-                    <h5 class="card-title">{{this.title}}</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Average Rating: {{this.reviews.rating}}/5</li>
-                        <li class="list-group-item"> {{this.reviews.total_reviews}} people has reviewed this product!</li>
-                    </ul>
-                    <a href="{{this.url}}" class="btn btn-primary">Contact Owner</a>
+                <div class="card productCard">
+                    <img class="card-img-top product__img" src="{{this.thumbnail}}" alt="{{this.title}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{this.title}}</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Average Rating: {{this.reviews.rating}}/5</li>
+                            <li class="list-group-item"> {{this.reviews.total_reviews}} people has reviewed this product!</li>
+                        </ul>
+                        <a href="{{this.url}}" class="btn btn-primary">Contact Owner</a>
+                    </div>
                 </div>
-            </div>
-            {{/each}}
+                {{/each}}
+            {{else}}
+                <h1>Please Wait a moment.....</h1>
+            {{/if}}
+
         </div> 
         
 

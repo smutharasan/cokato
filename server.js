@@ -183,12 +183,28 @@ app.get('/shop', (req, res) => {
     })
     .then((prods) => {
       let results = prods.result.slice(0, 10);
-      res.render('viewShop', {
-        registeredUser: req.session.user,
-        errorsPresent: req.session.err,
-        retrievedProducts: results,
-        layout: 'homeBasic', // do not use the default Layout (main.hbs)
-      });
+      return results;
+    })
+    .then((givenProducts) => {
+      let validShopStatus = true;
+      if (results) {
+        res.render('viewShop', {
+          registeredUser: req.session.user,
+          errorsPresent: req.session.err,
+          retrievedProducts: givenProducts,
+          validShopStatus: validShopStatus,
+          layout: 'homeBasic', // do not use the default Layout (main.hbs)
+        });
+      } else {
+        validShopStatus = false;
+        res.render('viewShop', {
+          registeredUser: req.session.user,
+          errorsPresent: req.session.err,
+          retrievedProducts: givenProducts,
+          validShopStatus: validShopStatus,
+          layout: 'homeBasic', // do not use the default Layout (main.hbs)
+        });
+      }
     })
     .catch(console.error);
 });
