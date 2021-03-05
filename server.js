@@ -182,7 +182,7 @@ app.get('/shop', (req, res) => {
       country: 'CA',
     })
     .then((prods) => {
-      results = prods.result.slice(0, 10);
+      let results = prods.result.slice(0, 10);
       res.render('viewShop', {
         registeredUser: req.session.user,
         errorsPresent: req.session.err,
