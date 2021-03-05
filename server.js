@@ -45,7 +45,7 @@ app.use(
   clientSessions({
     cookieName: 'session', // this is the object name that will be added to 'req'
     secret: 'seneca_hackathon_cokato_social_media_app', // this should be a long un-guessable string.
-    duration: 20 * 60 * 1000, // duration of the session in milliseconds (2 minutes)
+    duration: 200 * 60 * 1000, // duration of the session in milliseconds (2 minutes)
     activeDuration: 1000 * 60, // the session will be extended by this many ms each request (1 minute)
   })
 );
@@ -192,6 +192,7 @@ app.get('/shop', (req, res) => {
     })
     .catch(console.error);
 });
+
 app.get('/news', (req, res) => {
   const xhttp = new XMLHttpRequest();
   //http://newsapi.org/v2/top-headlines?country=ca&category=health&apiKey=a53b6bfe3090434d97c0069edda96c77
